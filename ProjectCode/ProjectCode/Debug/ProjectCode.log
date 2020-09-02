@@ -1,0 +1,34 @@
+﻿  ProjectCode.cpp
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(891): warning C4018: '<': signed/unsigned mismatch
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1294): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1281): warning C4101: 'directed': unreferenced local variable
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1406): warning C4129: 'L': unrecognized character escape sequence
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1435): warning C4129: 'L': unrecognized character escape sequence
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1492): warning C4129: 'S': unrecognized character escape sequence
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1521): warning C4129: 'L': unrecognized character escape sequence
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1342): warning C4101: 'directed': unreferenced local variable
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1562): warning C4101: 'directed': unreferenced local variable
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(792): warning C4018: '<': signed/unsigned mismatch
+  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(771): note: while compiling class template member function 'void Dijkstra<int>::SSSP_dijkstra_fibqueue(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)'
+          with
+          [
+              _Ty=int
+          ]
+  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(851): note: see reference to function template instantiation 'void Dijkstra<int>::SSSP_dijkstra_fibqueue(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)' being compiled
+          with
+          [
+              _Ty=int
+          ]
+  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1274): note: see reference to class template instantiation 'Dijkstra<int>' being compiled
+c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(742): warning C4018: '<': signed/unsigned mismatch
+  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(721): note: while compiling class template member function 'void Dijkstra<int>::SSSP_dijkstra(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)'
+          with
+          [
+              _Ty=int
+          ]
+  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(829): note: see reference to function template instantiation 'void Dijkstra<int>::SSSP_dijkstra(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)' being compiled
+          with
+          [
+              _Ty=int
+          ]
+  ProjectCode.vcxproj -> C:\Users\Warwick\Desktop\Project Program\ProjectCode - no thorup\ProjectCode\Debug\ProjectCode.exe
