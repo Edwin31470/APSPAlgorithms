@@ -29,11 +29,6 @@ struct Edge {
 	pair<int, T> dest; // first is destination node, second is edge weight
 };
 
-struct UnweightedEdge {
-	int source;
-	int dest;
-};
-
 // standard graph object - weighted directed graph with optional directed flag
 template <class T>
 class StandardGraph
@@ -179,34 +174,6 @@ public:
 					edge.second = weight;
 				}
 			}
-		}
-	}
-};
-
-// unweighted directed graph - not used
-class UnweightedGraph
-{
-public:
-	// construct a vector of vectors to represent an adjacency list
-	vector<vector<int>> list;
-	int size;
-
-	// Graph Constructor
-	UnweightedGraph(vector<UnweightedEdge> const &edges, int N)
-	{
-		size = N;
-
-		// resize the vector to N elements of type vector<int>
-		list.resize(N);
-
-		// add edges to the directed graph
-		for (auto &edge : edges)
-		{
-			// insert at the end
-			list[edge.source].push_back(edge.dest);
-
-			// Uncomment below line for undirected graph
-			// adjList[edge.dest].push_back(edge.src);
 		}
 	}
 };
@@ -831,7 +798,7 @@ public:
 	{
 		int N = graph.size;
 
-		vector<Edge<Dtype>> edges;
+		DistanceMatrix<Dtype> output(N);
 
 		for (int i = 0; i < N; i++) {
 
@@ -839,12 +806,10 @@ public:
 			SSSP_dijkstra(graph, i, distances);
 
 			for (int j = 0; j < N; j++) {
-				if (distances[j] != std::numeric_limits<Dtype>::max())
-					edges.push_back({ i, make_pair(j, distances[j]) });
+				if (distances[j] != std::numeric_limits<int>::max())
+					output.setEdge(i, j, distances[j]);
 			}
 		}
-
-		DistanceMatrix<Dtype> output(edges, N);
 
 		return output;
 	}
@@ -853,7 +818,7 @@ public:
 	{
 		int N = graph.size;
 
-		vector<Edge<Dtype>> edges;
+		DistanceMatrix<Dtype> output(N);
 
 		for (int i = 0; i < N; i++) {
 
@@ -861,12 +826,10 @@ public:
 			SSSP_dijkstra_fibqueue(graph, i, distances);
 
 			for (int j = 0; j < N; j++) {
-				if (distances[j] != std::numeric_limits<Dtype>::max())
-					edges.push_back({ i, make_pair(j, distances[j]) });
+				if (distances[j] != std::numeric_limits<int>::max())
+					output.setEdge(i, j, distances[j]);
 			}
 		}
-
-		DistanceMatrix<Dtype> output(edges, N);
 
 		return output;
 	}
@@ -875,61 +838,58 @@ public:
 // object to perform BreadFirst search - needs to be updated
 struct BreadthFirst {
 private:
-	priority_queue<int, vector<int>, std::greater<int>> queue;
+	//priority_queue<int, vector<int>, std::greater<int>> queue;
+	queue<int> queue;
 
 public:
 
-	int* SSSP_breadth_first(const UnweightedGraph graph, int source) //Algorithm for SSSP  
+	void SSSP_breadth_first(const StandardGraph<int> &graph, int source, vector<int> &distances) //Algorithm for SSSP  
 	{
-		const int max_size = 5001; //Maximum possible number of vertices. Preallocating space for DataStructures accordingly 
 		int N = graph.size;
 
-		int distances[max_size]; //Stores distance 
-		bool visited[max_size] = { false }; //Determines whether the node has been visited or not 
-
-		for (int i = 0; i < N; i++) //Set initial distances to Infinity 
-			distances[i] = std::numeric_limits<int>::max();
+		vector<bool> visited(N, false); // determines whether the node has been visited or not 
 
 		visited[source] = true;
 		distances[source] = 0;
-		queue.push(source); //Pushing the source with distance from itself as 0 
+		queue.push(source);
 
 		while (!queue.empty())
 		{
-			int current_vertex = queue.top();
+			int current_vertex = queue.front();
 			queue.pop();
 
+			// iterate through all adjacent vertices 
 			for (int i = 0; i < graph.list[current_vertex].size(); i++) {
-				if (!visited[graph.list[current_vertex][i]])
-				{
-					visited[graph.list[current_vertex][i]] = true;
-					distances[graph.list[current_vertex][i]] = distances[current_vertex] + 1;
 
-					queue.push(graph.list[current_vertex][i]);
+				int adjacent_vertex = graph.list[current_vertex][i].first;
+
+				// if the adjacent vertex is not visited, go to the next adjacent vertex
+				if (!visited[adjacent_vertex]) {
+					visited[adjacent_vertex] = true;
+					distances[adjacent_vertex] = distances[current_vertex] + 1; // set the new distance
+
+					queue.push(adjacent_vertex); // add the adjacent vertex to the queue
 				}
 			}
 		}
-
-		return distances;
 	}
 
-	StandardGraph<int> APSP_breadth_first(UnweightedGraph graph)
+	DistanceMatrix<int> APSP_breadth_first(StandardGraph<int> graph)
 	{
 		int N = graph.size;
 
-		vector<Edge<int>> edges;
+		DistanceMatrix<int> output(N);
 
 		for (int i = 0; i < N; i++) {
 
-			int* distances = SSSP_breadth_first(graph, i);
+			vector<int> distances(N, std::numeric_limits<int>::max()); //Stores shortest distance, initial distances of infinity
+			SSSP_breadth_first(graph, i, distances);
 
 			for (int j = 0; j < N; j++) {
 				if (distances[j] != std::numeric_limits<int>::max())
-					edges.push_back({ i, make_pair(j, distances[j]) });
+					output.setEdge(i, j, distances[j]);
 			}
 		}
-
-		StandardGraph<int> output(edges, N);
 
 		return output;
 	}
@@ -963,7 +923,7 @@ public:
 	{
 		int N = graph.size;
 
-		vector<Edge<Dtype>> edges;
+		DistanceMatrix<Dtype> output(N);
 
 		for (int i = 0; i < N; i++) {
 
@@ -971,12 +931,10 @@ public:
 			SSSP_bellman_ford(graph, i, distances);
 
 			for (int j = 0; j < N; j++) {
-				if (distances[j] != std::numeric_limits<Dtype>::max())
-					edges.push_back({ i, make_pair(j, distances[j]) });
+				if (distances[j] != std::numeric_limits<int>::max())
+					output.setEdge(i, j, distances[j]);
 			}
 		}
-
-		DistanceMatrix<Dtype> output(edges, N);
 
 		return output;
 	}
@@ -1126,9 +1084,6 @@ void get_parameters_no_weights(int &size, double &density, int &batch_size) {
 
 	std::cout << "\nDensity (0 to 1): ";
 	cin >> density;
-
-	std::cout << "\nDirected? (T or F):";
-	//  cin >> directed;
 
 	std::cout << "\nBatch size (0 to x): ";
 	cin >> batch_size;
@@ -1525,15 +1480,87 @@ void run_batch_gaussian()
 	std::cout << "\n";
 }
 
-// performance testing on unweighted graphs
-void run_unweighted_batch(UnweightedGraph graph)
+// performance testing on constant weighted graphs, analagous to unweighted, to compare breadth-first search to other algorithms
+void run_batch_unweighted()
 {
+	GraphGenerator graph_gen;
+
+	Dijkstra<int> dijkstra;
+	JohnsonDijkstra<int> johnson_dijkstra;
+	FloydWarshall<int> floyd_warshall;
+	BreadthFirst breadth_first;
+
 	auto t_start = Clock::now();
-	//StandardGraph<int> output = breadth_first.APSP_breadth_first(graph);
 	auto t_end = Clock::now();
 
-	std::cout << " - Time to solve Breadth-First: " <<
-		std::chrono::duration_cast<std::chrono::seconds>(t_end - t_start).count() << " seconds \n";
+	double total_times[10] = { 0 };
+
+	int size;
+	double density;
+	int batch_size;
+
+	get_parameters_no_weights(size, density, batch_size);
+
+	for (int i = 0; i < batch_size; i++)
+	{
+		std::cout << "\nIteration " << i + 1 << " started:\n";
+
+		StandardGraph<int> graph = graph_gen.generateERGraphInt(size, density, 1, 1);
+
+		// Binary Dijkstra
+		std::cout << "\n - Binary Heap Dijkstra started\n";
+		t_start = Clock::now();
+		dijkstra.APSP_dijkstra(graph);
+		t_end = Clock::now();
+
+		total_times[0] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+		// Fibonacci Dijkstra
+		std::cout << "\n - Fibonacci Heap Dijkstra started\n";
+		t_start = Clock::now();
+		dijkstra.APSP_dijkstra_fibqueue(graph);
+		t_end = Clock::now();
+
+		total_times[1] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+		// Johnson Dijkstra
+		std::cout << "\n - Johnson Dijkstra started\n";
+		t_start = Clock::now();
+		johnson_dijkstra.johnson_dijkstra(graph);
+		t_end = Clock::now();
+
+		total_times[2] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+		// FloydWarshall
+		std::cout << "\n - Floyd Warshall started\n";
+		t_start = Clock::now();
+		floyd_warshall.floyd_warshall(graph);
+		t_end = Clock::now();
+
+		total_times[3] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+		// BreadthFirst
+		std::cout << "\n - Breadth First started\n";
+		t_start = Clock::now();
+		breadth_first.APSP_breadth_first(graph);
+		t_end = Clock::now();
+
+		total_times[4] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+		std::cout << "\n - Iteration " << i + 1 << " ended\n";
+	}
+
+	std::cout << "\nResults:\n";
+
+	std::cout << " - Time to solve Binary Heap Dijkstra: " << int(total_times[0] / batch_size) << " seconds \n";
+
+	std::cout << " - Time to solve Fibonacci Heap: " << int(total_times[1] / batch_size) << " seconds \n";
+
+	std::cout << " - Time to solve Johnson Dijkstra: " << int(total_times[2] / batch_size) << " seconds \n";
+
+	std::cout << " - Time to solve Floyd Warshall: " << int(total_times[3] / batch_size) << " seconds \n";
+
+	std::cout << " - Time to solve Breadth First: " << int(total_times[4] / batch_size) << " seconds \n";
 
 	std::cout << "\n";
 }
@@ -1598,6 +1625,7 @@ void run_on_real_graph(string filename)
 
 	std::cout << "\n";
 }
+
 
 // print verification that the algorithms produce the correct result for known integer weighted graphs
 void verify_algorithms_int()
@@ -1751,6 +1779,67 @@ void verify_algorithms_doubles()
 	johnson_output.printMatrix();
 }
 
+// print verification that the algorithms produce the correct result for known integer weighted graphs
+void verify_algorithms_unweighted()
+{
+	// declare algorithm structures
+	Dijkstra<int> dijkstra_int;
+	BellmanFord<int> bellman_ford_int;
+	JohnsonDijkstra<int> johnson_dijkstra_int;
+	FloydWarshall<int> floyd_warshall_int;
+	BreadthFirst breadth_first;
+
+	// load graphs
+	StandardGraph<int> graph = loadKnownGraph();
+	StandardGraph<int> solution = loadKnownSolution();;
+
+	std::cout << "VERIFYING ALGORITHMS\n";
+
+	// print adjacency list representation of graph
+	std::cout << "Adjacency List of graph: \n";
+	graph.printGraph();
+	std::cout << "\n";
+
+	// print distance matrix representation of graph
+	std::cout << "Distance Matrix of graph: \n";
+	DistanceMatrix<int> dist(graph.size);
+	dist.fill_with_graph(graph);
+	dist.printMatrix();
+
+	std::cout << "Distance Matrix of solution: \n";
+	DistanceMatrix<int> solution_dist(solution.size);
+	solution_dist.fill_with_graph(solution);
+	solution_dist.printMatrix();
+
+
+
+	std::cout << "APSP Dijkstra binary queue solution: \n";
+	DistanceMatrix<int> dijkstra_output = dijkstra_int.APSP_dijkstra(graph);
+	dijkstra_output.printMatrix();
+
+
+	std::cout << "APSP Dijkstra fibonaci queue solution: \n";
+	DistanceMatrix<int> dijkstra_output_fib = dijkstra_int.APSP_dijkstra_fibqueue(graph);
+	dijkstra_output_fib.printMatrix();
+
+
+	std::cout << "APSP Bellman-Ford solution: \n";
+	DistanceMatrix<int> bellman_output = bellman_ford_int.APSP_bellman_ford(graph);
+	bellman_output.printMatrix();
+
+	std::cout << "Johnson-Dijkstra solution: \n";
+	DistanceMatrix<int> johnson_output = johnson_dijkstra_int.johnson_dijkstra(graph);
+	johnson_output.printMatrix();
+
+	std::cout << "Floyd-Warshall solution: \n";
+	DistanceMatrix<int> floyd_output = floyd_warshall_int.floyd_warshall(graph);
+	floyd_output.printMatrix();
+
+	std::cout << "Breadth-First solution: \n";
+	DistanceMatrix<int> breadth_output = breadth_first.APSP_breadth_first(graph);
+	breadth_output.printMatrix();
+}
+
 // print verification that the algorithms produce the correct result for randomly generated graphs with integer weights
 void verify_graph_generation_int()
 {
@@ -1808,16 +1897,19 @@ int main()
 	//verify_algorithms_int();
 	//verify_algorithms_doubles();
 	//verify_algorithms_negatives();
+	verify_algorithms_unweighted();
 	//verify_graph_generation();
 	//verify_graph_generation_doubles();
+
 
 	std::cout << "\n\n" << "TESTING ON RANDOM GRAPHS\n";
 	//run_batch_double();
 	//run_batch_float();
 	//run_batch_int();
 	//run_batch_gaussian();
-	//run_batch_no_bellman();
-	run_on_real_graph("openflights.txt");
+	//run_batch_with_bellman();
+	//run_batch_unweighted();
+	//run_on_real_graph("openflights.txt");
 
 	int any;
 	std::cout << "Close with any key: ";

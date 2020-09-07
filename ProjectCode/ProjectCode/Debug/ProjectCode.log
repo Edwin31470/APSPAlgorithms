@@ -1,34 +1,35 @@
-﻿  ProjectCode.cpp
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(891): warning C4018: '<': signed/unsigned mismatch
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1294): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1281): warning C4101: 'directed': unreferenced local variable
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1406): warning C4129: 'L': unrecognized character escape sequence
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1435): warning C4129: 'L': unrecognized character escape sequence
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1492): warning C4129: 'S': unrecognized character escape sequence
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1521): warning C4129: 'L': unrecognized character escape sequence
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1342): warning C4101: 'directed': unreferenced local variable
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1562): warning C4101: 'directed': unreferenced local variable
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(792): warning C4018: '<': signed/unsigned mismatch
-  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(771): note: while compiling class template member function 'void Dijkstra<int>::SSSP_dijkstra_fibqueue(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)'
+﻿  pch.cpp
+  ProjectCode.cpp
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(602): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(862): warning C4018: '<': signed/unsigned mismatch
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1205): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1414): warning C4101: 'floyd_warshall': unreferenced local variable
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1573): warning C4101: 'floyd_warshall': unreferenced local variable
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(769): warning C4018: '<': signed/unsigned mismatch
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(748): note: while compiling class template member function 'void Dijkstra<float>::SSSP_dijkstra_fibqueue(const StandardGraph<float> &,int,std::vector<Dtype,std::allocator<_Ty>> &)'
           with
           [
-              _Ty=int
+              Dtype=float,
+              _Ty=float
           ]
-  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(851): note: see reference to function template instantiation 'void Dijkstra<int>::SSSP_dijkstra_fibqueue(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)' being compiled
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(826): note: see reference to function template instantiation 'void Dijkstra<float>::SSSP_dijkstra_fibqueue(const StandardGraph<float> &,int,std::vector<Dtype,std::allocator<_Ty>> &)' being compiled
           with
           [
-              _Ty=int
+              Dtype=float,
+              _Ty=float
           ]
-  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(1274): note: see reference to class template instantiation 'Dijkstra<int>' being compiled
-c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(742): warning C4018: '<': signed/unsigned mismatch
-  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(721): note: while compiling class template member function 'void Dijkstra<int>::SSSP_dijkstra(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)'
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1260): note: see reference to class template instantiation 'Dijkstra<float>' being compiled
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(719): warning C4018: '<': signed/unsigned mismatch
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(698): note: while compiling class template member function 'void Dijkstra<float>::SSSP_dijkstra(const StandardGraph<float> &,int,std::vector<Dtype,std::allocator<_Ty>> &)'
           with
           [
-              _Ty=int
+              Dtype=float,
+              _Ty=float
           ]
-  c:\users\warwick\desktop\project program\projectcode - no thorup\projectcode\projectcode\projectcode.cpp(829): note: see reference to function template instantiation 'void Dijkstra<int>::SSSP_dijkstra(const StandardGraph<int> &,int,std::vector<int,std::allocator<_Ty>> &)' being compiled
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(806): note: see reference to function template instantiation 'void Dijkstra<float>::SSSP_dijkstra(const StandardGraph<float> &,int,std::vector<Dtype,std::allocator<_Ty>> &)' being compiled
           with
           [
-              _Ty=int
+              Dtype=float,
+              _Ty=float
           ]
-  ProjectCode.vcxproj -> C:\Users\Warwick\Desktop\Project Program\ProjectCode - no thorup\ProjectCode\Debug\ProjectCode.exe
+  ProjectCode.vcxproj -> C:\Users\Warwick\Documents\GitHub\APSPAlgorithms\ProjectCode\Debug\ProjectCode.exe
