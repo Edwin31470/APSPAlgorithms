@@ -23,7 +23,8 @@ using namespace std;
 typedef std::chrono::high_resolution_clock Clock;
 
 
-// GRAPH OBJECTS
+
+// GRAPH OBJECTS - distance list and distance matrix
 
 // structures to contain edge information
 template <class T>
@@ -284,7 +285,7 @@ public:
 
 
 
-// UTILITY FUNCTIONS
+// UTILITY FUNCTIONS - loading graphs and solutions, loading graphs from files and randomly generating graphs
 
 // returns a pre-defined int graph with 8 vertices and 11 edges
 StandardGraph<int> loadKnownGraph()
@@ -379,8 +380,6 @@ StandardGraph<int> loadKnownGraphUnweighted()
 
 	return graph;
 }
-
-
 
 // returns the known APSP solution of graph from loadKnownGraph()
 StandardGraph<int> loadKnownSolution()
@@ -531,7 +530,7 @@ StandardGraph<double> loadRealGraph(string filename)
 			double weight = stoi(tokens[2]);
 			edges.push_back({ source, make_pair(dest, weight) });
 
-			// find the max vertex label - dest is needed as it is possible for no edges to leave the max vertex
+			// find the max vertex label
 			if (source + 1 > N)
 				N = source + 1;
 			if (dest + 1 > N)
@@ -547,16 +546,91 @@ StandardGraph<double> loadRealGraph(string filename)
 		file.close();
 	}
 	else
-		std::cout << "Unable to open file";
+		std::cout << " Unable to open file";
 
 	// construct graph
 	StandardGraph<double> graph(edges, N);
 
-	std::cout << "\nGraph loaded:";
-	std::cout << "\n - Number of vertices: " << N;
-	std::cout << "\n - Number of edges: " << edges.size();
-	std::cout << "\n - Minimum edge weight: " << minWeight;
-	std::cout << "\n - Maximum edge weight: " << maxWeight << "\n";
+	std::cout << "\n Graph loaded:";
+	std::cout << "\n  - Number of vertices: " << N;
+	std::cout << "\n  - Number of edges: " << edges.size();
+	std::cout << "\n  - Minimum edge weight: " << minWeight;
+	std::cout << "\n  - Maximum edge weight: " << maxWeight << "\n";
+
+	return graph;
+}
+
+// builds and returns a half the graph contained in a file - used to test structure of graphs too large, does not find the full APSP solution
+// requires knowning the max vertex label, if lower is true we add every vertex < max_vertex/2
+StandardGraph<double> loadRealGraphSplit(string filename, int max_vertex, bool lower)
+{
+	vector<Edge<double>> edges;
+
+	int middle = max_vertex / 2;
+	int N = 0; // - 1 because vertices in the source file are labelled 1 to N but we need 0 to N - 1
+	double maxWeight = std::numeric_limits<double>::min();
+	double minWeight = std::numeric_limits<double>::max();
+
+	string line;
+	ifstream file(filename);
+	if (file.is_open())
+	{
+		while (getline(file, line))
+		{
+			istringstream iss(line);
+			vector<string> tokens{ istream_iterator<string>{iss}, istream_iterator<string>{} };
+			int source = stoi(tokens[0]) - 1; // - 1 because vertices in the source file are labelled 1 to N but we need 0 to N - 1
+			int dest = stoi(tokens[1]) - 1;
+			double weight = stod(tokens[2]);
+
+			if (lower == false && source < middle && dest < middle) {
+
+				edges.push_back({ source, make_pair(dest, weight) });
+
+				// find the minimum edge weight
+				if (weight < minWeight)
+					minWeight = weight;
+				// find the maximum edge weight
+				if (weight > maxWeight)
+					maxWeight = weight;
+
+				// find the max vertex label
+				if (source + 1 > N)
+					N = source + 1;
+				if (dest + 1 > N)
+					N = dest + 1;
+			}
+			else if (lower == true && source > middle && dest > middle) {
+
+				edges.push_back({ source - middle, make_pair(dest - middle, weight) });
+
+				// find the minimum edge weight
+				if (weight < minWeight)
+					minWeight = weight;
+				// find the maximum edge weight
+				if (weight > maxWeight)
+					maxWeight = weight;
+
+				// find the max vertex label
+				if (source - middle + 1 > N)
+					N = source - middle + 1;
+				if (dest - middle + 1 > N)
+					N = dest - middle + 1;
+			}
+		}
+		file.close();
+	}
+	else
+		std::cout << " Unable to open file";
+
+	// construct graph
+	StandardGraph<double> graph(edges, N);
+
+	std::cout << "\n Graph loaded:";
+	std::cout << "\n  - Number of vertices: " << N;
+	std::cout << "\n  - Number of edges: " << edges.size();
+	std::cout << "\n  - Minimum edge weight: " << minWeight;
+	std::cout << "\n  - Maximum edge weight: " << maxWeight << "\n";
 
 	return graph;
 }
@@ -685,7 +759,7 @@ public:
 
 
 
-// ALGORITHMS
+// ALGORITHMS - APSP algorithms
 
 // comparator for determining priority for priority queue (shortest edge comes first) for dijkstra based algorithms
 template <class D>
@@ -997,7 +1071,7 @@ public:
 	}
 };
 
-// object to perform BreadthFirst search
+// object to perform Breadth-First search
 struct BreadthFirst {
 private:
 	queue<int> queue;
@@ -1370,7 +1444,7 @@ public:
 
 
 
-// RUNNING THE PROGRAM
+// RUNNING THE PROGRAM - get input from user, verify algorithm correctness, verify graph generation and run batches
 
 // fill variables for random graph generation with input from user - weights of uniform range between min and max
 void get_parameters(int &size, double &density, double &minweight, double &maxweight, int &batch_size) {
@@ -1410,13 +1484,13 @@ void get_parameters_gaussian(int &size, double &density, double &mean, double &s
 
 // fill variables for random graph generation with input from user - no weight distribution
 void get_parameters_no_weights(int &size, double &density, int &batch_size) {
-	std::cout << "\n Number of vertices (0 to 5000): ";
+	std::cout << "\n Number of vertices (positive integer): ";
 	cin >> size;
 
 	std::cout << "\n Density (0 to 1): ";
 	cin >> density;
 
-	std::cout << "\n Batch size (0 to x): ";
+	std::cout << "\n Batch size (positive integer): ";
 	cin >> batch_size;
 }
 
@@ -2017,7 +2091,7 @@ void run_batch_gaussian()
 	std::cout << "\n";
 }
 
-// performance testing on constant weighted graphs, analagous to unweighted, to compare breadth-first search to other algorithms
+// performance testing on constant 1 weighted graphs, analagous to unweighted, to compare breadth-first search to other algorithms
 void run_batch_unweighted()
 {
 	GraphGenerator graph_gen;
@@ -2102,7 +2176,7 @@ void run_batch_unweighted()
 	std::cout << "\n";
 }
 
-// performance testing on graphs with double weights using ditance matrices over distance lists
+// performance testing on graphs with double weights using ditsance matrices
 void run_batch_distance_matrix()
 {
 	GraphGenerator graph_gen;
@@ -2193,6 +2267,7 @@ void run_on_real_graph()
 	double total_times[10] = { 0 };
 
 	string filename;
+	bool lower;
 	cout << "\n Enter a file path: ";
 	cin >> filename;
 	StandardGraph<double> graph = loadRealGraph(filename);
@@ -2225,7 +2300,7 @@ void run_on_real_graph()
 	// FloydWarshall
 	std::cout << "\n  - Floyd Warshall started\n";
 	t_start = Clock::now();
-	//floyd_warshall.floyd_warshall(graph);
+	floyd_warshall.floyd_warshall(graph);
 	t_end = Clock::now();
 
 	total_times[3] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
@@ -2244,9 +2319,75 @@ void run_on_real_graph()
 	std::cout << "\n";
 }
 
+// performance testing on graphs of real data loaded from files - use when the graph is too big for the memory
+void run_on_real_graph_split()
+{
+	Dijkstra<double> dijkstra;
+	JohnsonDijkstra<double> johnson_dijkstra;
+	FloydWarshall<double> floyd_warshall;
+
+	auto t_start = Clock::now();
+	auto t_end = Clock::now();
+
+	double total_times[10] = { 0 };
+
+	string filename;
+	bool lower;
+	cout << "\n Enter a file path: ";
+	cin >> filename;
+	cout << "\n Upper or lower half? (0 or 1): ";
+	cin >> lower;
+	StandardGraph<double> graph = loadRealGraphSplit(filename, 16726, lower);
+
+	// Binary Dijkstra
+	std::cout << "\n  - Binary Heap Dijkstra started\n";
+	t_start = Clock::now();
+	dijkstra.APSP_dijkstra(graph);
+	t_end = Clock::now();
+
+	total_times[0] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+	// Fibonacci Dijkstra
+	std::cout << "\n  - Fibonacci Heap Dijkstra started\n";
+	t_start = Clock::now();
+	dijkstra.APSP_dijkstra_fibqueue(graph);
+	t_end = Clock::now();
+
+	total_times[1] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+
+	// Johnson Dijkstra
+	std::cout << "\n  - Johnson Dijkstra started\n";
+	t_start = Clock::now();
+	johnson_dijkstra.johnson_dijkstra(graph);
+	t_end = Clock::now();
+
+	total_times[2] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+	// FloydWarshall
+	std::cout << "\n  - Floyd Warshall started\n";
+	t_start = Clock::now();
+	floyd_warshall.floyd_warshall(graph);
+	t_end = Clock::now();
+
+	total_times[3] += std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+
+
+	std::cout << "\n Results:\n";
+
+	std::cout << "  - Time to solve Binary Heap Dijkstra: " << int(total_times[0]) << " seconds \n";
+
+	std::cout << "  - Time to solve Fibonacci Heap: " << int(total_times[1]) << " seconds \n";
+
+	std::cout << "  - Time to solve Johnson Dijkstra: " << int(total_times[2]) << " seconds \n";
+
+	std::cout << "  - Time to solve Floyd Warshall: " << int(total_times[3]) << " seconds \n";
+
+	std::cout << "\n";
+}
+
+// choose a batch operation
 void run_batch() {
-
-
 
 	cout << "\n CHOOSE A BATCH OPERATION FROM THE LIST \n";
 
@@ -2304,6 +2445,7 @@ void run_batch() {
 	}
 }
 
+
 int main()
 {
 	cout << "\n --- for information on how to use this program see the \"Implementation\" section in the writeup --- \n";
@@ -2347,15 +2489,3 @@ int main()
 
 	return 0;
 }
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

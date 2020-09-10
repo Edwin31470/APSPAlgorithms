@@ -1,1 +1,33 @@
-﻿
+﻿  pch.cpp
+  ProjectCode.cpp
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(697): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1098): warning C4018: '<': signed/unsigned mismatch
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1729): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(2270): warning C4101: 'lower': unreferenced local variable
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(955): warning C4018: '<': signed/unsigned mismatch
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(934): note: while compiling class template member function 'void Dijkstra<double>::SSSP_dijkstra_fibqueue(const StandardGraph<double> &,int,std::vector<double,std::allocator<_Ty>> &)'
+          with
+          [
+              _Ty=double
+          ]
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1043): note: see reference to function template instantiation 'void Dijkstra<double>::SSSP_dijkstra_fibqueue(const StandardGraph<double> &,int,std::vector<double,std::allocator<_Ty>> &)' being compiled
+          with
+          [
+              _Ty=double
+          ]
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(1860): note: see reference to class template instantiation 'Dijkstra<double>' being compiled
+c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(809): warning C4018: '<': signed/unsigned mismatch
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(787): note: while compiling class template member function 'void Dijkstra<double>::SSSP_dijkstra(const StandardGraph<double> &,int,std::vector<double,std::allocator<_Ty>> &)'
+          with
+          [
+              _Ty=double
+          ]
+  c:\users\warwick\documents\github\apspalgorithms\projectcode\projectcode\projectcode.cpp(897): note: see reference to function template instantiation 'void Dijkstra<double>::SSSP_dijkstra(const StandardGraph<double> &,int,std::vector<double,std::allocator<_Ty>> &)' being compiled
+          with
+          [
+              _Ty=double
+          ]
+  Generating code
+  All 2277 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  ProjectCode.vcxproj -> C:\Users\Warwick\Documents\GitHub\APSPAlgorithms\ProjectCode\Release\ProjectCode.exe
